@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  experimental: {
+    outputFileTracingRoot: undefined,
+  },
   images: {
     domains: ['159-112-182-249.traefik.me'],
     remotePatterns: [
@@ -13,6 +16,25 @@ const nextConfig = {
         hostname: '**',
       }
     ]
+  },
+  // Headers de segurança
+  poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          }
+        ]
+      }
+    ];
   }
 }
 
