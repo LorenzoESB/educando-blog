@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+    # Banco MySQL
+    mysql:
+        image: mysql:8.0
+        container_name: ghost-mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-ghost_root_2024}
+            MYSQL_DATABASE: ${MYSQL_DATABASE:-ghost_db}
+            MYSQL_USER: ${MYSQL_USER:-ghost_user}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ghost_pass_2024}
+        volumes:
+            - mysql_data:/var/lib/mysql
+        networks:
+            - ghost_network
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10
+
+    # Ghost CMS
+    ghost:
+        image: ghost:5-alpine
+        container_name: ghost-cms
+        restart: unless-stopped
+        depends_on:
+            mysql:
+                condition: service_healthy
+        environment:
+            url: ${GHOST_URL:-http://159-112-182-249.traefik.me}
+            database__client: mysql
+            database__connection__host: mysql
+            database__connection__user: ${MYSQL_USER:-ghost_user}
+            database__connection__password: ${MYSQL_PASSWORD:-ghost_pass_2024}
+            database__connection__database: ${MYSQL_DATABASE:-ghost_db}
+            NODE_ENV: ${NODE_ENV:-production}
+            mail__transport: Direct
+        volumes:
+            - ghost_content:/var/lib/ghost/content
+        networks:
+            - ghost_network
+        ports:
+            - "2368:2368"
+
+    # Next.js App
+    nextjs:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: nextjs-blog
+        restart: unless-stopped
+        depends_on:
+            - ghost
+        environment:
+            GHOST_URL: http://ghost:2368 # Comunicação interna entre containers
+            GHOST_CONTENT_API_KEY: ${GHOST_CONTENT_API_KEY}
+            GHOST_ADMIN_API_KEY: ${GHOST_ADMIN_API_KEY}
+            NEXT_PUBLIC_GHOST_URL: ${GHOST_URL:-http://159-112-182-249.traefik.me}
+            NODE_ENV: production
+        ports:
+            - "3000:3000"
+        networks:
+            - ghost_network
+
+volumes:
+    mysql_data:
+    ghost_content:
+
+networks:
+    ghost_network:
+        driver: bridge
