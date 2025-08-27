@@ -1,0 +1,20 @@
+services:
+  ghost:
+    image: ghost:5-alpine
+    container_name: ghost_local
+    ports:
+      - "2368:2368"
+    env_file:
+      - .env
+    environment:
+      # URL que o Ghost usa internamente (dev)
+      url: ${GHOST_URL:-http://localhost:2368}
+      # Força SQLite em dev
+      database__client: sqlite3
+      database__connection__filename: /var/lib/ghost/content/data/ghost.db
+      # (Opcional) logar menos verboso
+      logging__level: info
+    volumes:
+      # Mapeia toda a pasta content para persistir dados/temas/uploads
+      - ./content:/var/lib/ghost/content
+    restart: unless-stopped
