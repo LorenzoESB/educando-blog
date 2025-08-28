@@ -13,6 +13,7 @@ interface PostPageProps {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
+  console.log('Parâmetros recebidos:', params);
   const post = await GhostService.getPostBySlug(params.slug);
 
   if (!post) {

@@ -1,10 +1,11 @@
 import Posts from "@/pages/posts";
+import LatestsPosts from "./latests-posts";
 
 export default function MiddleContent() {
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
             <div className="">
-                <Posts />
+                <LatestsPosts />
             </div>
         </div>
     );

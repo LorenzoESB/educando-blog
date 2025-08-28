@@ -6,6 +6,7 @@ import { ThemeToggle } from "./switch-theme";
 import { Search, Menu } from "lucide-react";
 import { Input } from "./ui/input";
 import Link from "next/link";
+import Image from "next/image";
 
 const links = [
     { href: "/", label: "Início" },
@@ -22,8 +23,10 @@ const Header = () => {
                 <div className="flex h-16 items-center justify-between gap-4">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3">
-                        <div className="bg-gradient-primary rounded-lg px-2.5 py-2">
-                            <span className="text-white font-bold text-xl leading-none">EB</span>
+                        <div className=" rounded-lg px-2.5 py-2">
+                            <span className="text-white font-bold text-xl leading-none">
+                                <Image src="/bolsito.svg" alt="Logo" width={60} height={60} />
+                            </span>
                         </div>
                         <div className="leading-tight">
                             <span className="gradient-text text-lg font-bold block">Educando Seu Bolso</span>

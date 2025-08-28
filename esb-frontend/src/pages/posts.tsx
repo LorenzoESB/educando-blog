@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Link from "next/link";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -66,15 +66,11 @@ export default async function Posts({ searchParams }: { searchParams?: { page?: 
 
             {pagination.pages > 1 && (
                 <div className="flex justify-center mt-12 space-x-4">
-                    <Button className="bg-blue-200">
-                        Anterior
-                    </Button>
+                    <Button className="bg-blue-200">Anterior</Button>
                     <span className="px-4 py-2">
                         Página {pagination.page} de {pagination.pages}
                     </span>
-                    <Button className="bg-blue-200">
-                        Próxima
-                    </Button>
+                    <Button className="bg-blue-200">Próxima</Button>
                 </div>
             )}
         </div>

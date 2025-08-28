@@ -33,10 +33,10 @@ export class GhostService {
     }
 
     static async getPostBySlug(slug: string): Promise<GhostPost | null> {
+        console.log('Buscando post com slug:', slug);
         try {
             const post = await ghostClient.posts.read(
-                { slug },
-                { include: ['tags', 'authors'] }
+                { slug }               
             );
             return post as GhostPost;
         } catch (error) {
